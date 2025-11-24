@@ -27,6 +27,9 @@ jobs:
         pip install -r requirements-dev.txt
 
     - name: Run API tests
+      env:
+        DB_DRIVER: sqlite3
+        DB_NAME: test_raddb.sqlite
       run: |
         python -m pytest tests/test_api_*.py
 

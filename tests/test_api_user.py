@@ -44,7 +44,11 @@ def test_user():
 
     response = client.get("/api/v1/users")
     assert response.status_code == 200
-    assert get_user in response.json()  # user now part of collection
+    # Check if user is in collection by finding it and comparing
+    users = response.json()
+    found_user = next((u for u in users if u["username"] == get_user["username"]), None)
+    assert found_user is not None, f"User {get_user['username']} not found in response"
+    assert found_user == get_user  # user now part of collection
 
     # patch operation
 
