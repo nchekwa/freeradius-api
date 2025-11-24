@@ -1,0 +1,9 @@
+[tool.ruff.lint]
+extend-select = ["I"]
+
+[tool.ruff]
+line-length = 120
+src = ["freeradius-api/"]
+
+[tool.pytest.ini_options]
+pythonpath = "src/"

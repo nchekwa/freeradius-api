@@ -1,0 +1,64 @@
+from typing import Annotated
+from fastapi import Depends
+from freeradius.repositories import GroupRepository, HuntGroupRepository, NasRepository, UserRepository
+from freeradius.services import GroupService, HuntGroupService, NasService, UserService
+from database import db_connect
+from settings import RAD_TABLES
+
+#
+# Here we use FastAPI Dependency Injection system.
+#
+# For each API request:
+#   - a short-lived DB session will be established,
+#   - appropriate repositories and services will be instantiated.
+#
+
+
+def get_db_session():
+    db_session = db_connect()
+    try:
+        yield db_session
+    except:
+        # on any error, we rollback the DB
+        db_session.rollback()
+        raise
+    else:
+        # otherwise, we commit the DB
+        db_session.commit()
+    finally:
+        # in any case, we close the DB session
+        db_session.close()
+
+
+# Services depend on the repositories which depend on the DB session
+
+
+def get_user_service(db_session=Depends(get_db_session)) -> UserService:
+    return UserService(
+        user_repo=UserRepository(db_session, RAD_TABLES),
+        group_repo=GroupRepository(db_session, RAD_TABLES),
+    )
+
+
+def get_group_service(db_session=Depends(get_db_session)) -> GroupService:
+    return GroupService(
+        group_repo=GroupRepository(db_session, RAD_TABLES),
+        user_repo=UserRepository(db_session, RAD_TABLES),
+    )
+
+
+def get_nas_service(db_session=Depends(get_db_session)) -> NasService:
+    return NasService(nas_repo=NasRepository(db_session, RAD_TABLES))
+
+
+def get_huntgroup_service(db_session=Depends(get_db_session)) -> HuntGroupService:
+    return HuntGroupService(huntgroup_repo=HuntGroupRepository(db_session, RAD_TABLES))
+
+
+# API routes will depend on the services
+# (using Annotated dependencies for code reuse as per FastAPI doc)
+
+UserServiceDep = Annotated[UserService, Depends(get_user_service)]
+GroupServiceDep = Annotated[GroupService, Depends(get_group_service)]
+NasServiceDep = Annotated[NasService, Depends(get_nas_service)]
+HuntGroupServiceDep = Annotated[HuntGroupService, Depends(get_huntgroup_service)]

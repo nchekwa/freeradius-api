@@ -1,0 +1,13 @@
+fastapi
+pyfreeradius
+python-dotenv
+uvicorn
+
+# Uncomment the appropriate line to load the DB-API 2.0 (PEP 249) enabled driver
+mysql-connector-python
+#pymysql
+#pymssql
+#psycopg2
+#sqllite3
+#oracledb
+#<DRIVER>

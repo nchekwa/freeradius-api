@@ -1,0 +1,14 @@
+services:
+  freeradius-api:
+    hostname: freeradius-api
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      - DB_HOST=1.x.x.x
+      - DB_USER=radius01
+      - DB_PASS=password
+      - DB_NAME=radius01
+    command: "uvicorn api:app --host 0.0.0.0 --port 8000"
+    ports:
+      - "8000:8000"
