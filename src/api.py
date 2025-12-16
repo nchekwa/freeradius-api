@@ -1,7 +1,7 @@
 from fastapi import Depends, FastAPI
 from auth import verify_key
 from middleware.process_time import add_process_time_header
-from router import default_router, groups_router, huntgroups_router, nas_router, users_router
+from router import default_router, groups_router, huntgroups_router, nas_router, radacct_router, users_router
 
 
 # API
@@ -12,3 +12,4 @@ app.include_router(nas_router, prefix="/api/v1")
 app.include_router(users_router, prefix="/api/v1")
 app.include_router(groups_router, prefix="/api/v1")
 app.include_router(huntgroups_router, prefix="/api/v1")
+app.include_router(radacct_router, prefix="/api/v1")

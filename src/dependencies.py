@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import Depends
-from freeradius.repositories import GroupRepository, HuntGroupRepository, NasRepository, UserRepository
-from freeradius.services import GroupService, HuntGroupService, NasService, UserService
+from freeradius.repositories import GroupRepository, HuntGroupRepository, NasRepository, RadAcctRepository, UserRepository
+from freeradius.services import GroupService, HuntGroupService, NasService, RadAcctService, UserService
 from database import db_connect
 from settings import RAD_TABLES
 
@@ -55,6 +55,10 @@ def get_huntgroup_service(db_session=Depends(get_db_session)) -> HuntGroupServic
     return HuntGroupService(huntgroup_repo=HuntGroupRepository(db_session, RAD_TABLES))
 
 
+def get_radacct_service(db_session=Depends(get_db_session)) -> RadAcctService:
+    return RadAcctService(radacct_repo=RadAcctRepository(db_session, RAD_TABLES))
+
+
 # API routes will depend on the services
 # (using Annotated dependencies for code reuse as per FastAPI doc)
 
@@ -62,3 +66,4 @@ UserServiceDep = Annotated[UserService, Depends(get_user_service)]
 GroupServiceDep = Annotated[GroupService, Depends(get_group_service)]
 NasServiceDep = Annotated[NasService, Depends(get_nas_service)]
 HuntGroupServiceDep = Annotated[HuntGroupService, Depends(get_huntgroup_service)]
+RadAcctServiceDep = Annotated[RadAcctService, Depends(get_radacct_service)]

@@ -5,6 +5,7 @@ from .user import User
 from .group import Group
 from .nas import Nas
 from .huntgroup import HuntGroup, HuntGroupCreate
+from .radacct import RadAcct
 
 __all__ = [
     "AttributeOpValue",
@@ -15,4 +16,5 @@ __all__ = [
     "Nas",
     "HuntGroup",
     "HuntGroupCreate",
+    "RadAcct",
 ]
