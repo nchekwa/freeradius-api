@@ -78,6 +78,44 @@ CREATE TABLE radhuntgroup (
   nasportid VARCHAR(15) DEFAULT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_radhuntgroup_nasipaddress ON radhuntgroup (nasipaddress);
+
+DROP TABLE IF EXISTS radacct;
+CREATE TABLE radacct (
+  radacctid INTEGER PRIMARY KEY AUTOINCREMENT,
+  acctsessionid VARCHAR(64) NOT NULL DEFAULT '',
+  acctuniqueid VARCHAR(32) NOT NULL DEFAULT '',
+  username VARCHAR(64) NOT NULL DEFAULT '',
+  groupname VARCHAR(64) NOT NULL DEFAULT '',
+  realm VARCHAR(64) DEFAULT '',
+  nasipaddress VARCHAR(15) NOT NULL DEFAULT '',
+  nasportid VARCHAR(32) DEFAULT NULL,
+  nasporttype VARCHAR(32) DEFAULT NULL,
+  acctstarttime DATETIME DEFAULT NULL,
+  acctupdatetime DATETIME DEFAULT NULL,
+  acctstoptime DATETIME DEFAULT NULL,
+  acctinterval INTEGER DEFAULT NULL,
+  acctsessiontime INTEGER DEFAULT NULL,
+  acctauthentic VARCHAR(32) DEFAULT NULL,
+  connectinfo_start VARCHAR(50) DEFAULT NULL,
+  connectinfo_stop VARCHAR(50) DEFAULT NULL,
+  acctinputoctets BIGINT DEFAULT NULL,
+  acctoutputoctets BIGINT DEFAULT NULL,
+  calledstationid VARCHAR(50) NOT NULL DEFAULT '',
+  callingstationid VARCHAR(50) NOT NULL DEFAULT '',
+  acctterminatecause VARCHAR(32) NOT NULL DEFAULT '',
+  servicetype VARCHAR(32) DEFAULT NULL,
+  framedprotocol VARCHAR(32) DEFAULT NULL,
+  framedipaddress VARCHAR(15) NOT NULL DEFAULT '',
+  framedipv6address VARCHAR(45) NOT NULL DEFAULT '',
+  framedipv6prefix VARCHAR(45) NOT NULL DEFAULT '',
+  framedinterfaceid VARCHAR(44) NOT NULL DEFAULT '',
+  delegatedipv6prefix VARCHAR(45) NOT NULL DEFAULT '',
+  class VARCHAR(64) DEFAULT NULL
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_radacct_acctuniqueid ON radacct (acctuniqueid);
+CREATE INDEX IF NOT EXISTS idx_radacct_username ON radacct (username);
+CREATE INDEX IF NOT EXISTS idx_radacct_acctstarttime ON radacct (acctstarttime);
+CREATE INDEX IF NOT EXISTS idx_radacct_nasipaddress ON radacct (nasipaddress);
 """
 
 

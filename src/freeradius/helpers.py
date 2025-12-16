@@ -1,5 +1,5 @@
-from .repositories import GroupRepository, HuntGroupRepository, NasRepository, UserRepository
-from .services import GroupService, HuntGroupService, NasService, UserService
+from .repositories import GroupRepository, HuntGroupRepository, NasRepository, RadAcctRepository, UserRepository
+from .services import GroupService, HuntGroupService, NasService, RadAcctService, UserService
 from .settings import RadTables
 
 
@@ -12,6 +12,7 @@ class Repositories:
         self.group = GroupRepository(db_session=db_session, rad_tables=rad_tables)
         self.nas = NasRepository(db_session=db_session, rad_tables=rad_tables)
         self.huntgroup = HuntGroupRepository(db_session=db_session, rad_tables=rad_tables)
+        self.radacct = RadAcctRepository(db_session=db_session, rad_tables=rad_tables)
 
 
 class Services:
@@ -21,3 +22,4 @@ class Services:
         self.group = GroupService(group_repo=repositories.group, user_repo=repositories.user)
         self.nas = NasService(nas_repo=repositories.nas)
         self.huntgroup = HuntGroupService(huntgroup_repo=repositories.huntgroup)
+        self.radacct = RadAcctService(radacct_repo=repositories.radacct)

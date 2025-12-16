@@ -1,7 +1,7 @@
 from abc import ABC
 from contextlib import closing
 
-from .models import AttributeOpValue, Group, GroupUser, HuntGroup, Nas, User, UserGroup
+from .models import AttributeOpValue, Group, GroupUser, HuntGroup, Nas, RadAcct, User, UserGroup
 from .settings import RadTables
 
 #
@@ -465,3 +465,83 @@ class HuntGroupRepository(BaseRepository):
             db_cursor.execute(sql, (groupname,))
             (count,) = db_cursor.fetchone()
             return count > 0
+
+
+class RadAcctRepository(BaseRepository):
+    def find_by_username(
+        self,
+        username: str,
+        limit: int | None = 100,
+        offset: int | None = None,
+    ) -> list[RadAcct]:
+        params: list[str | int] = [username]
+        limit_clause = ""
+        offset_clause = ""
+
+        if limit:
+            limit_clause = f"LIMIT {self.ph}"
+            params.append(limit)
+
+        if offset:
+            offset_clause = f"OFFSET {self.ph}"
+            params.append(offset)
+
+        sql = f"""
+            SELECT radacctid, acctsessionid, acctuniqueid, username, groupname, realm,
+                   nasipaddress, nasportid, nasporttype, acctstarttime, acctupdatetime,
+                   acctstoptime, acctinterval, acctsessiontime, acctauthentic,
+                   connectinfo_start, connectinfo_stop, acctinputoctets, acctoutputoctets,
+                   calledstationid, callingstationid, acctterminatecause, servicetype,
+                   framedprotocol, framedipaddress, framedipv6address, framedipv6prefix,
+                   framedinterfaceid, delegatedipv6prefix, class
+            FROM {self.rad_tables.radacct}
+            WHERE username = {self.ph}
+            ORDER BY acctstarttime DESC
+            {limit_clause} {offset_clause}
+        """
+
+        with closing(self.db_session.cursor()) as db_cursor:
+            db_cursor.execute(sql, tuple(params))
+            rows = db_cursor.fetchall()
+            return [
+                RadAcct(
+                    radacctid=row[0],
+                    acctsessionid=row[1] or "",
+                    acctuniqueid=row[2] or "",
+                    username=row[3] or "",
+                    groupname=row[4] or "",
+                    realm=row[5],
+                    nasipaddress=row[6] or "",
+                    nasportid=row[7],
+                    nasporttype=row[8],
+                    acctstarttime=row[9],
+                    acctupdatetime=row[10],
+                    acctstoptime=row[11],
+                    acctinterval=row[12],
+                    acctsessiontime=row[13],
+                    acctauthentic=row[14],
+                    connectinfo_start=row[15],
+                    connectinfo_stop=row[16],
+                    acctinputoctets=row[17],
+                    acctoutputoctets=row[18],
+                    calledstationid=row[19] or "",
+                    callingstationid=row[20] or "",
+                    acctterminatecause=row[21] or "",
+                    servicetype=row[22],
+                    framedprotocol=row[23],
+                    framedipaddress=row[24] or "",
+                    framedipv6address=row[25] or "",
+                    framedipv6prefix=row[26] or "",
+                    framedinterfaceid=row[27] or "",
+                    delegatedipv6prefix=row[28] or "",
+                    class_attr=row[29],
+                )
+                for row in rows
+            ]
+
+    def count_by_username(self, username: str) -> int:
+        with closing(self.db_session.cursor()) as db_cursor:
+            sql = f"SELECT COUNT(*) FROM {self.rad_tables.radacct} WHERE username = {self.ph}"
+            db_cursor.execute(sql, (username,))
+            (count,) = db_cursor.fetchone()
+            return count
