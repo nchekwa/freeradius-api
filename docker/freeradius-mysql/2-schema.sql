@@ -77,7 +77,6 @@ CREATE TABLE IF NOT EXISTS radacct (
   acctsessionid varchar(64) NOT NULL default '',
   acctuniqueid varchar(32) NOT NULL default '',
   username varchar(64) NOT NULL default '',
-  groupname varchar(64) NOT NULL default '',
   realm varchar(64) default '',
   nasipaddress varchar(15) NOT NULL default '',
   nasportid varchar(32) default NULL,
@@ -88,8 +87,8 @@ CREATE TABLE IF NOT EXISTS radacct (
   acctinterval int(12) default NULL,
   acctsessiontime int(12) unsigned default NULL,
   acctauthentic varchar(32) default NULL,
-  connectinfo_start varchar(50) default NULL,
-  connectinfo_stop varchar(50) default NULL,
+  connectinfo_start varchar(128) default NULL,
+  connectinfo_stop varchar(128) default NULL,
   acctinputoctets bigint(20) default NULL,
   acctoutputoctets bigint(20) default NULL,
   calledstationid varchar(50) NOT NULL default '',
@@ -117,5 +116,5 @@ CREATE TABLE IF NOT EXISTS radacct (
   KEY acctinterval (acctinterval),
   KEY acctstoptime (acctstoptime),
   KEY nasipaddress (nasipaddress),
-  INDEX bulk_close (acctstoptime, nasipaddress, acctstarttime)
+  KEY class (class)
 ) ENGINE = INNODB;

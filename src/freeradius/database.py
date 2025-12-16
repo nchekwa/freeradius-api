@@ -85,7 +85,6 @@ CREATE TABLE radacct (
   acctsessionid VARCHAR(64) NOT NULL DEFAULT '',
   acctuniqueid VARCHAR(32) NOT NULL DEFAULT '',
   username VARCHAR(64) NOT NULL DEFAULT '',
-  groupname VARCHAR(64) NOT NULL DEFAULT '',
   realm VARCHAR(64) DEFAULT '',
   nasipaddress VARCHAR(15) NOT NULL DEFAULT '',
   nasportid VARCHAR(32) DEFAULT NULL,
@@ -96,8 +95,8 @@ CREATE TABLE radacct (
   acctinterval INTEGER DEFAULT NULL,
   acctsessiontime INTEGER DEFAULT NULL,
   acctauthentic VARCHAR(32) DEFAULT NULL,
-  connectinfo_start VARCHAR(50) DEFAULT NULL,
-  connectinfo_stop VARCHAR(50) DEFAULT NULL,
+  connectinfo_start VARCHAR(128) DEFAULT NULL,
+  connectinfo_stop VARCHAR(128) DEFAULT NULL,
   acctinputoctets BIGINT DEFAULT NULL,
   acctoutputoctets BIGINT DEFAULT NULL,
   calledstationid VARCHAR(50) NOT NULL DEFAULT '',
@@ -114,8 +113,18 @@ CREATE TABLE radacct (
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_radacct_acctuniqueid ON radacct (acctuniqueid);
 CREATE INDEX IF NOT EXISTS idx_radacct_username ON radacct (username);
+CREATE INDEX IF NOT EXISTS idx_radacct_framedipaddress ON radacct (framedipaddress);
+CREATE INDEX IF NOT EXISTS idx_radacct_framedipv6address ON radacct (framedipv6address);
+CREATE INDEX IF NOT EXISTS idx_radacct_framedipv6prefix ON radacct (framedipv6prefix);
+CREATE INDEX IF NOT EXISTS idx_radacct_framedinterfaceid ON radacct (framedinterfaceid);
+CREATE INDEX IF NOT EXISTS idx_radacct_delegatedipv6prefix ON radacct (delegatedipv6prefix);
+CREATE INDEX IF NOT EXISTS idx_radacct_acctsessionid ON radacct (acctsessionid);
+CREATE INDEX IF NOT EXISTS idx_radacct_acctsessiontime ON radacct (acctsessiontime);
 CREATE INDEX IF NOT EXISTS idx_radacct_acctstarttime ON radacct (acctstarttime);
+CREATE INDEX IF NOT EXISTS idx_radacct_acctinterval ON radacct (acctinterval);
+CREATE INDEX IF NOT EXISTS idx_radacct_acctstoptime ON radacct (acctstoptime);
 CREATE INDEX IF NOT EXISTS idx_radacct_nasipaddress ON radacct (nasipaddress);
+CREATE INDEX IF NOT EXISTS idx_radacct_class ON radacct (class);
 """
 
 

@@ -33,7 +33,6 @@ def insert_radacct_record(db_session, **kwargs):
         "acctsessionid": "session123",
         "acctuniqueid": "unique123",
         "username": "testuser",
-        "groupname": "",
         "realm": "",
         "nasipaddress": "192.168.1.1",
         "nasportid": None,

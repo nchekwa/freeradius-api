@@ -7,7 +7,6 @@ class RadAcct(BaseModel):
     acctsessionid: str = ""
     acctuniqueid: str = ""
     username: str = ""
-    groupname: str = ""
     realm: str | None = ""
     nasipaddress: str = ""
     nasportid: str | None = None
